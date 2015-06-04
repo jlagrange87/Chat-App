@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+</head>
+<body>
+	<div class="container">
+		<div class="well">
+			<section><div><hr>Chat Room!<hr></div>
+			<div id="chat" class="scrollMe"></div>
+			</section> 
+		</div>
+	</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-5" id="user-box">
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">Username</span>
+						<input type="text" class="form-control" id="user" aria-describedby="sizing-addon3">
+					</div>
+				</div>
+				<div class="col-sm-7" id="msg-box">
+					<form id="formSubmit">
+						<div class="input-group">
+							<input type="text" class="form-control" id="msg" placeholder="Message...">
+							<span class="input-group-btn">
+							<button class="btn btn-primary">Submit</button>
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="bower_components/backbone/backbone-min.js"></script>
+	<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script>
+</body>
+</html>
