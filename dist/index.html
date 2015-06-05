@@ -8,41 +8,40 @@
 <body>
 	<section class= "page" id="home">
 		<div class="container">
+			<div id="login-page" class="col-sm-10 col-sm-offset-1">WHOA</div>
 			<form id="login">	
-				<div class="col-sm-5" id="user-box">
+				<div class="col-sm-10 col-sm-offset-1">
 					<div class="input-group input-group-md">
-						<span class="input-group-addon" id="sizing-addon3">Username</span>
+						<span class="input-group-addon" id="sizing-addon3">Username:</span>
 						<input type="text" class="form-control" id="user" aria-describedby="sizing-addon3">
 					</div>
 				</div>
-				<div class="col-sm-7" id="msg-box">
-					<div class="input-group">
-						<input type="text" class="form-control" id="roomNum" placeholder="Chat Room Number...">
-						<span class="input-group-btn">
-						<button class="btn btn-primary">Submit</button>
-						</span>
+				<div class="col-sm-10 col-sm-offset-1">
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3"> Chatroom:</span>				
+						<input type="text" class="form-control" id="roomNum" aria-describedby="sizing-addon3">
 					</div>
+					<button class="btn btn-primary btn-block btn-lg">Login</button>
 				</div>
-			</form>	
+			</form>
 		</div>
 	</section>
 	<section class="page" id="chatRoom">		
 		<div class="container">
 			<div class="well">
-				<section><div><hr>Chat Room!<hr></div>
+				<div class="chat-header"></div>
 				<div id="chat" class="scrollMe"></div>
-				</section> 
 			</div>
-		</div>
-		<div class="col-sm-8 col-sm-offset-2" id="msg-box">
-			<form id="formSubmit">
-				<div class="input-group">
-					<input type="text" class="form-control" id="msg" placeholder="Message...">
-					<span class="input-group-btn">
-					<button class="btn btn-primary">Submit</button>
-					</span>
-				</div>
-			</form>
+			<div class="col-sm-12">
+				<form id="formSubmit">
+					<div class="input-group">
+						<input type="text" class="form-control" id="msg" placeholder="Message...">
+						<span class="input-group-btn">
+						<button class="btn btn-success">Submit</button>
+						</span>
+					</div>
+				</form>
+			</div>
 		</div>
 	</section>
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>

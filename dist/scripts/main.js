@@ -14,6 +14,7 @@ $(document).ready(function(){
 
 		},
 				chatRoom: function(roomNum){
+					$(".chat-header").html("")
 					$(".page").hide();
 					$("#chatRoom").show();
 
@@ -27,6 +28,7 @@ $(document).ready(function(){
 		loginObject.userName = $("#user").val();
 		loginObject.chatRoomNum= $("#roomNum").val();
 		myRouter.navigate("chatRoom/"+loginObject.chatRoomNum, {trigger: true})
+		$(".chat-header").append("<hr>Welcome to Chat Room "+loginObject.chatRoomNum+"!<hr>");
 		console.log(loginObject);
 	});
 	$("#formSubmit").submit(function(e){
