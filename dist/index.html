@@ -6,15 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="styles/style.css">
 </head>
 <body>
-	<div class="container">
-		<div class="well">
-			<section><div><hr>Chat Room!<hr></div>
-			<div id="chat" class="scrollMe"></div>
-			</section> 
-		</div>
-	</div>
+	<section class= "page" id="home">
 		<div class="container">
-			<div class="row">
+			<form id="login">	
 				<div class="col-sm-5" id="user-box">
 					<div class="input-group input-group-md">
 						<span class="input-group-addon" id="sizing-addon3">Username</span>
@@ -22,17 +16,35 @@
 					</div>
 				</div>
 				<div class="col-sm-7" id="msg-box">
-					<form id="formSubmit">
-						<div class="input-group">
-							<input type="text" class="form-control" id="msg" placeholder="Message...">
-							<span class="input-group-btn">
-							<button class="btn btn-primary">Submit</button>
-							</span>
-						</div>
-					</form>
+					<div class="input-group">
+						<input type="text" class="form-control" id="roomNum" placeholder="Chat Room Number...">
+						<span class="input-group-btn">
+						<button class="btn btn-primary">Submit</button>
+						</span>
+					</div>
 				</div>
+			</form>	
+		</div>
+	</section>
+	<section class="page" id="chatRoom">		
+		<div class="container">
+			<div class="well">
+				<section><div><hr>Chat Room!<hr></div>
+				<div id="chat" class="scrollMe"></div>
+				</section> 
 			</div>
 		</div>
+		<div class="col-sm-8 col-sm-offset-2" id="msg-box">
+			<form id="formSubmit">
+				<div class="input-group">
+					<input type="text" class="form-control" id="msg" placeholder="Message...">
+					<span class="input-group-btn">
+					<button class="btn btn-primary">Submit</button>
+					</span>
+				</div>
+			</form>
+		</div>
+	</section>
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 	<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
