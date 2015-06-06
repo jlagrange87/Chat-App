@@ -1,9 +1,19 @@
+nav div{
+	background-color: #337AB7;
+	color:white;
+}
+.icon-bar{
+	background-color: white;
+}
 #login-page{
 	font-size: 55px;
 	text-align: center;
 }
 .chat-header{
 	font-size: 20px;
+}
+#chatRoom{
+	margin-left: 5px;
 }
 #chat{
 	font-size: 15px;
@@ -13,6 +23,9 @@
 #chat div {
 	margin-top: 15px;
 }
+#hideMeOnMobile{
+		display: none
+}
 hr { 
 	display: block; 
 	height: 1px;
@@ -21,6 +34,37 @@ hr {
     margin: .5em 0; 
     padding: 0;
 }
+.profile-header{
+	font-size: 20px;
+}
+#profilemessages{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
+.leaderboard-header{
+	font-size: 20px;
+}
+#leaderboardList{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
+#userList{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
+#roomList{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
+#activeList{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
 @media(min-width: 768px){
 	#user-box{
 		padding-right:0;
@@ -28,6 +72,17 @@ hr {
 	#chat{
 	max-height: 500px;
 	}
+	.user-header{
+	font-size: 20px;
+	}
+	#userList{
+		font-size: 15px;
+		height: 380px;
+		overflow-y: scroll
+	}
+	#hideMeOnMobile{
+		display: block;
+}
 }
 ::-webkit-scrollbar {
     width: 6px;
