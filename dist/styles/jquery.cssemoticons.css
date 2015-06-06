@@ -50,9 +50,9 @@ span.css-emoticon {
     rgb(255,221,85) 56%,
     rgb(255,238,170) 100%
   );
-/*  -webkit-transition-property:color, background, transform;  
+  -webkit-transition-property:color, background, transform;  
   -webkit-transition-duration: 1s, 1s;  
-  -webkit-transition-timing-function: linear, ease-in;*/
+  -webkit-transition-timing-function: linear, ease-in;
 }
 
 /* Styles for two-character emoticons that need more letter-spacing for proportionality */
