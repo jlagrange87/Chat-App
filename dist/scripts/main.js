@@ -105,7 +105,7 @@ $(document).ready(function(){
 	}
 	function getMessages(){
 		$.get(
-			"https://whispering-sierra-7759.herokuapp.com/rooms/get_time",
+			"https://whispering-sierra-7759.herokuapp.com/rooms/get_time/300",
 			onMessagesReceived,
 			"json"
 			);
