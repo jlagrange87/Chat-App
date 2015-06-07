@@ -72,6 +72,14 @@ hr {
 	height: 380px;
 	overflow-y: scroll;
 }
+#history-results{
+	font-size: 15px;
+	height: 380px;
+	overflow-y: scroll;
+}
+.history-header{
+	font-size: 20px;
+}
 @media(min-width: 768px){
 	#user-box{
 		padding-right:0;
@@ -87,9 +95,6 @@ hr {
 		height: 380px;
 		overflow-y: scroll
 	}
-	#hideMeOnMobile{
-		display: block;
-}
 }
 ::-webkit-scrollbar {
     width: 6px;

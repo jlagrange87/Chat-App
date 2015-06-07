@@ -90,8 +90,22 @@
 		<div class="container">
 			<div class="well">
 				<div class="profile-header"></div>
-				<div id="profilemessages"><div>Example message</div></div>
+				<div id="profilemessages"><div>Loading. . .</div></div>
 			</div>
+		</div>
+	</section>
+	<section class="page" id="roomHistory">    
+		<div class="container">
+			<div class="well">
+				<div class="history-header"></div>
+				<div id="history-results"><div>Please enter the proper format in the fields below.</div></div>
+			</div>
+			<form id="history-submit" class="col-sm-8 col-sm-offset-2">
+				<input type="text" class="form-control" id="hist1" placeholder="Start Date Example... 06-04-2015">
+				<input type="text" class="form-control" id="hist2" placeholder="End Date Example... 06-06-2015">
+				<input type="text" class="form-control" id="hist-room" placeholder="Room Number... 1,2,3">
+				<button class="btn btn-success btn-lg btn-block">Submit</button>
+			</form>
 		</div>
 	</section>
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
@@ -101,5 +115,6 @@
 	<script type="text/javascript" src="bower_components/backbone/backbone-min.js"></script>
 	<script type="text/javascript" src="bower_components/moment/moment.js"></script>
 	<script type="text/javascript" src="scripts/main.js"></script>
+	<audio muted></audio>
 </body>
 </html>

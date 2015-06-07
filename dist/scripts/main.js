@@ -1,40 +1,50 @@
 $(document).ready(function(){
 	var App = Backbone.Router.extend({
 		routes:{
-			"":     			 "home",
+			"":     			 	"home",
 
-			"chatRoom/:query":     "chatRoom",
+			"chatRoom/:query":     	"chatRoom",
 
-			"leaderboard": 			 "leaderboard",
+			"leaderboard": 			"leaderboard",
 
-			"userProfile/:query": 	  "userProfile"
+			"userProfile/:query": 	"userProfile",
 
-		},
-				home: function(){
-					$(".page").hide();
-					$("#home").fadeIn(1000);
+			"roomHistory": 			"roomHistory"
 
 		},
-				chatRoom: function(roomNum){
-					$(".chat-header").html("");
-					$("#chat").html("");
-					$(".page").hide();
-					$("#chatRoom").fadeIn(1000);
-					$("body").append("<audio src='audio/Welcome.mp3' preload='preload' autoplay='autoplay'></audio>")
+			home: function(){
+				$(".page").hide();
+				$("#home").fadeIn(1000);
 
 		},
-				leaderboard: function(){
-					$(".chat-header").html("")
-					$(".page").hide();
-					$("#leaderboard").fadeIn(1000);
+			chatRoom: function(roomNum){
+				$(".chat-header").html("");
+				$("#chat").html("");
+				$(".page").hide();
+				$(".chat-header").append("<hr>Welcome to Chat Room "+$("#roomNum").val()+"!<hr>");
+				$("#chatRoom").fadeIn(1000);
+				$("body").append("<audio src='audio/Welcome.mp3' preload='preload' autoplay='autoplay'></audio>")
 
 		},
-				userProfile: function(theUser){
-					$(".profile-header").html("")
-					$(".page").hide();
-					$("#userProfile").fadeIn(1000);
+			leaderboard: function(){
+				$(".page").hide();
+				$("#leaderboard").fadeIn(1000);
 
 		},
+			userProfile: function(theUser){
+				$(".profile-header").html("")
+				$(".page").hide();
+				$("#userProfile").fadeIn(1000);
+
+		},
+			roomHistory: function(){
+				$(".history-header").html("");
+				$("#history-results").html("");
+				$(".page").hide();
+				$("#roomHistory").fadeIn(1000);
+				$(".history-header").append("<hr>Welcome to Room History!<hr>")
+			}
+
 
 	});
 	var myRouter = new App();
@@ -42,19 +52,23 @@ $(document).ready(function(){
 	var loginObject = {};
 	var profileObject = {};
 	var messageArray = [];
+	var roomHistoryObject = {};
 	$("#login").submit(function(e){
 		loginObject.userName = $("#user").val();
 		loginObject.chatRoomNum = $("#roomNum").val();
 		myRouter.navigate("chatRoom/"+loginObject.chatRoomNum, {trigger: true})
 		for(var i = 0; i < messageArray.length; i++){
 			var cPost = messageArray[i];
-			if(cPost.room == loginObject.chatRoomNum){
+			if(cPost.room == loginObject.chatRoomNum && cPost.messages.indexOf(".png") == -1 && cPost.messages.indexOf(".jpg") == -1 && cPost.messages.indexOf(".gif") == -1){
 				$("#chat").append("<div> <b>"+cPost.user+"</b>"+ "  "+moment(cPost.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+cPost.messages+"</p>");
 				$('.comment').emoticonize();
 			}
+
+			else if(cPost.room == loginObject.chatRoomNum){
+				$("#chat").append("<div> <b>"+cPost.user+"</b>"+ "  "+moment(cPost.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>"+"<img src='"+cPost.messages+"'style='max-width: 200px'>" +"<a href="+cPost.messages+">"+cPost.messages+"</a>" );
+				$('.comment').emoticonize();
+			}
 		}
-		$(".chat-header").append("<hr>Welcome to Chat Room "+$("#roomNum").val()+"!<hr>");
-		$("body").append("<audio src='' preload='preload' autoplay='autoplay'></audio>")
 	});
 	$("#formSubmit").submit(function(e){
 		e.preventDefault();
@@ -73,12 +87,29 @@ $(document).ready(function(){
 		console.log($("#whoIs").val());
 		profileObject.userName = $("#whoIs").val();
 		myRouter.navigate("userProfile/"+profileObject.userName, {trigger: true})
-		$(".profile-header").append("<hr>Welcome to "+profileObject.userName+"'s Message Histroy! <hr>");
+		$(".profile-header").append("<hr>Welcome to "+profileObject.userName+" Message Histroy! <hr>");
 	});
+	$("#history-submit").submit(function(e){
+		e.preventDefault();
+		roomHistoryObject.date1 = $("#hist1").val();
+		roomHistoryObject.date2 = $("#hist2").val();
+		roomHistoryObject.room = $("#hist-room").val();
+		getRoomHistroy();
+		$(".history-header").html("");
+		$(".history-header").append("<hr>This is Room #"+roomHistoryObject.room+"'s "+roomHistoryObject.date1+" / "+roomHistoryObject.date2+"'s History!<hr>")
+	});
+
 	function getUserHistory(){
 		$.get(
 			"https://whispering-sierra-7759.herokuapp.com/rooms",
 			onUserHistorySearch,
+			"json"
+			);
+	}
+	function getRoomHistroy(){
+		$.get(
+			"https://whispering-sierra-7759.herokuapp.com/get_history"+"/"+roomHistoryObject.date1+"/"+roomHistoryObject.date2,
+			onRoomHistorySearch,
 			"json"
 			);
 	}
@@ -110,6 +141,7 @@ $(document).ready(function(){
 			"json"
 			);
 	}
+
 	function onUserLeadersReceived(userLeaderList){
 		$("#userList").html("");
 		for(var i = 0; i < userLeaderList.length; i++){
@@ -143,9 +175,25 @@ $(document).ready(function(){
 					return false;
 				}
 			});
-			if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1){
+			if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1 && postMsg.messages.indexOf("@") == -1){
 				messageArray.push(messageList[i]);
 				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+postMsg.messages+"</p>");
+				$('.comment').emoticonize();
+				setTimeout("$('.scrollMe').scrollTop(6000000)",750)
+				$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
+				console.log(messageArray)
+			}
+			else if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1){
+				messageArray.push(messageList[i]);
+				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+postMsg.messages+"</p>");
+				$('.comment').emoticonize();
+				setTimeout("$('.scrollMe').scrollTop(6000000)",750)
+				$("body").append("<audio src='audio/pewpew.mp3' preload='auto' autoplay='autoplay'></audio>")
+				console.log(messageArray)
+			}
+			else if(currentMessage === undefined){
+				messageArray.push(messageList[i]);
+				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<img src='"+postMsg.messages+"'style='max-width: 200px'>" +"<a href="+postMsg.messages+">"+postMsg.messages+"</a>" );
 				$('.comment').emoticonize();
 				setTimeout("$('.scrollMe').scrollTop(6000000)",750)
 				$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
@@ -164,6 +212,17 @@ $(document).ready(function(){
 			}
 		}	
 	}
+	function onRoomHistorySearch(roomHistoryOverall){
+		$("#history-results").html("");
+		for(var i = 0; i < roomHistoryOverall.length; i++){
+			var postHistory = roomHistoryOverall[i].messages;
+			var correctRoom = roomHistoryOverall[i].room;
+			if(correctRoom == roomHistoryObject.room){
+				$("#history-results").prepend("<div><b>"+roomHistoryOverall[i].user+" "+moment(roomHistoryOverall[i].created_at).format("h:mm:ss a, MMM Do YYYY")+": </b></div>" + "<p class='comment'>"+postHistory+"</p>");
+				$('.comment').emoticonize();
+			}
+		}	
+	}
 	setInterval(getMessages, 50)
 	getMessages();
 
@@ -176,5 +235,3 @@ $(document).ready(function(){
 	setInterval(getActiveUsers, 10000)
 	getActiveUsers();
 });
-
-
