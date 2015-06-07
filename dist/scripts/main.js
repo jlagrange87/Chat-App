@@ -21,9 +21,9 @@ $(document).ready(function(){
 				$(".chat-header").html("");
 				$("#chat").html("");
 				$(".page").hide();
-				$(".chat-header").append("<hr>Welcome to Chat Room "+$("#roomNum").val()+"!<hr>");
 				$("#chatRoom").fadeIn(1000);
 				$("body").append("<audio src='audio/Welcome.mp3' preload='preload' autoplay='autoplay'></audio>")
+				setInterval(getMessages, 500)
 
 		},
 			leaderboard: function(){
@@ -56,7 +56,8 @@ $(document).ready(function(){
 	$("#login").submit(function(e){
 		loginObject.userName = $("#user").val();
 		loginObject.chatRoomNum = $("#roomNum").val();
-		myRouter.navigate("chatRoom/"+loginObject.chatRoomNum, {trigger: true})
+		myRouter.navigate("chatRoom/"+$("#roomNum").val(), {trigger: true})
+		$(".chat-header").append("<hr>Welcome to Chat Room "+$("#roomNum").val()+"!<hr>");
 		for(var i = 0; i < messageArray.length; i++){
 			var cPost = messageArray[i];
 			if(cPost.room == loginObject.chatRoomNum && cPost.messages.indexOf(".png") == -1 && cPost.messages.indexOf(".jpg") == -1 && cPost.messages.indexOf(".gif") == -1){
@@ -65,7 +66,7 @@ $(document).ready(function(){
 			}
 
 			else if(cPost.room == loginObject.chatRoomNum){
-				$("#chat").append("<div> <b>"+cPost.user+"</b>"+ "  "+moment(cPost.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>"+"<img src='"+cPost.messages+"'style='max-width: 200px'>" +"<a href="+cPost.messages+">"+cPost.messages+"</a>" );
+				$("#chat").append("<div> <b>"+cPost.user+"</b>"+ "  "+moment(cPost.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>"+"<img src='"+cPost.messages+"'style='max-width: 250px'>" +"<div><a href="+cPost.messages+">"+cPost.messages+"</a></div>" );
 				$('.comment').emoticonize();
 			}
 		}
@@ -91,14 +92,24 @@ $(document).ready(function(){
 	});
 	$("#history-submit").submit(function(e){
 		e.preventDefault();
+		if($("#hist1").val().indexOf("-") == -1){
+			alert("Please input the correct format (e.g. 6-5-2015) in Start Date.")
+		}
+		else if($("#hist2").val().indexOf("-") == -1){
+			alert("Please input the correct format (e.g. 6-5-2015 in End Date.")
+		}
+		else if($("#hist-room").val() == ""){
+			alert("Please Specify a Room Number.")
+		}
+		else{
 		roomHistoryObject.date1 = $("#hist1").val();
 		roomHistoryObject.date2 = $("#hist2").val();
 		roomHistoryObject.room = $("#hist-room").val();
 		getRoomHistroy();
 		$(".history-header").html("");
 		$(".history-header").append("<hr>This is Room #"+roomHistoryObject.room+"'s "+roomHistoryObject.date1+" / "+roomHistoryObject.date2+"'s History!<hr>")
+		}
 	});
-
 	function getUserHistory(){
 		$.get(
 			"https://whispering-sierra-7759.herokuapp.com/rooms",
@@ -141,7 +152,6 @@ $(document).ready(function(){
 			"json"
 			);
 	}
-
 	function onUserLeadersReceived(userLeaderList){
 		$("#userList").html("");
 		for(var i = 0; i < userLeaderList.length; i++){
@@ -175,7 +185,7 @@ $(document).ready(function(){
 					return false;
 				}
 			});
-			if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1 && postMsg.messages.indexOf("@") == -1){
+			if(currentMessage === undefined && postMsg.room == loginObject.chatRoomNum && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1 && postMsg.messages.indexOf("@") == -1){
 				messageArray.push(messageList[i]);
 				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+postMsg.messages+"</p>");
 				$('.comment').emoticonize();
@@ -183,7 +193,7 @@ $(document).ready(function(){
 				$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
 				console.log(messageArray)
 			}
-			else if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1){
+			else if(currentMessage === undefined && postMsg.room == loginObject.chatRoomNum && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1){
 				messageArray.push(messageList[i]);
 				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+postMsg.messages+"</p>");
 				$('.comment').emoticonize();
@@ -191,9 +201,9 @@ $(document).ready(function(){
 				$("body").append("<audio src='audio/pewpew.mp3' preload='auto' autoplay='autoplay'></audio>")
 				console.log(messageArray)
 			}
-			else if(currentMessage === undefined){
+			else if(currentMessage === undefined && postMsg.room == loginObject.chatRoomNum){
 				messageArray.push(messageList[i]);
-				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<img src='"+postMsg.messages+"'style='max-width: 200px'>" +"<a href="+postMsg.messages+">"+postMsg.messages+"</a>" );
+				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<img src='"+postMsg.messages+"'style='max-width: 250px'>" +"<div><a href="+postMsg.messages+">"+postMsg.messages+"</a></div>");
 				$('.comment').emoticonize();
 				setTimeout("$('.scrollMe').scrollTop(6000000)",750)
 				$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
@@ -206,8 +216,12 @@ $(document).ready(function(){
 		for(var i = 0; i < overallMsgs.length; i++){
 			var postHistory = overallMsgs[i].messages;
 			var correctUser = overallMsgs[i].user;
-			if(correctUser == profileObject.userName){
+			if(correctUser == profileObject.userName && postHistory.indexOf(".png") == -1 && postHistory.indexOf(".jpg") == -1 && postHistory.indexOf(".gif") == -1){
 				$("#profilemessages").prepend("<div><b>"+moment(overallMsgs[i].created_at).format("h:mm:ss a, MMM Do YYYY")+", Chatroom #"+overallMsgs[i].room+": </b></div>" + "<p class='comment'>"+postHistory+"</p>");
+				$('.comment').emoticonize();
+			}
+			else if(correctUser == profileObject.userName){
+				$("#profilemessages").prepend("<div><b>"+moment(overallMsgs[i].created_at).format("h:mm:ss a, MMM Do YYYY")+", Chatroom #"+overallMsgs[i].room+": </b></div>" + "<img src='"+postHistory+"'style='max-width: 250px'>" +"<div><a href="+postHistory+">"+postHistory+"</a><div>");
 				$('.comment').emoticonize();
 			}
 		}	
@@ -217,21 +231,19 @@ $(document).ready(function(){
 		for(var i = 0; i < roomHistoryOverall.length; i++){
 			var postHistory = roomHistoryOverall[i].messages;
 			var correctRoom = roomHistoryOverall[i].room;
-			if(correctRoom == roomHistoryObject.room){
+			if(correctRoom == roomHistoryObject.room && postHistory.indexOf(".png") == -1 && postHistory.indexOf(".jpg") == -1 && postHistory.indexOf(".gif") == -1){
 				$("#history-results").prepend("<div><b>"+roomHistoryOverall[i].user+" "+moment(roomHistoryOverall[i].created_at).format("h:mm:ss a, MMM Do YYYY")+": </b></div>" + "<p class='comment'>"+postHistory+"</p>");
+				$('.comment').emoticonize();
+			}
+			else if(correctRoom == roomHistoryObject.room){
+				$("#history-results").prepend("<div><b>"+roomHistoryOverall[i].user+" "+moment(roomHistoryOverall[i].created_at).format("h:mm:ss a, MMM Do YYYY")+": </b></div>" + "<img src='"+postHistory+"'style='max-width: 250px'>" +"<div><a href="+postHistory+">"+postHistory+"</a></div>");
 				$('.comment').emoticonize();
 			}
 		}	
 	}
-	setInterval(getMessages, 50)
-	getMessages();
+	setInterval(getUserLeaders, 10000);
 
-	setInterval(getUserLeaders, 10000)
-	getUserLeaders();
+	setInterval(getRoomLeaders, 10000);
 
-	setInterval(getRoomLeaders, 10000)
-	getRoomLeaders();
-
-	setInterval(getActiveUsers, 10000)
-	getActiveUsers();
+	setInterval(getActiveUsers, 10000);
 });
