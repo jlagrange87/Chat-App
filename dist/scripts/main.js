@@ -54,6 +54,7 @@ $(document).ready(function(){
 	var messageArray = [];
 	var roomHistoryObject = {};
 	$("#login").submit(function(e){
+		e.preventDefault();
 		loginObject.userName = $("#user").val();
 		loginObject.chatRoomNum = $("#roomNum").val();
 		myRouter.navigate("chatRoom/"+$("#roomNum").val(), {trigger: true})
@@ -241,6 +242,7 @@ $(document).ready(function(){
 			}
 		}	
 	}
+	getMessages();
 	setInterval(getUserLeaders, 10000);
 
 	setInterval(getRoomLeaders, 10000);
