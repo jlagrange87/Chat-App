@@ -94,10 +94,10 @@ $(document).ready(function(){
 	$("#history-submit").submit(function(e){
 		e.preventDefault();
 		if($("#hist1").val().indexOf("-") == -1){
-			alert("Please input the correct format (e.g. 6-5-2015) in Start Date.")
+			alert("Please input the correct format yyyy-mm-dd (eg. 2015-6-5) in Start Date.")
 		}
 		else if($("#hist2").val().indexOf("-") == -1){
-			alert("Please input the correct format (e.g. 6-5-2015 in End Date.")
+			alert("Please input the correct format (eg. 2015-6-5) in End Date.")
 		}
 		else if($("#hist-room").val() == ""){
 			alert("Please Specify a Room Number.")
