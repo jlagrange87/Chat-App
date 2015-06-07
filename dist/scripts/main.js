@@ -20,6 +20,7 @@ $(document).ready(function(){
 					$("#chat").html("");
 					$(".page").hide();
 					$("#chatRoom").fadeIn(1000);
+					$("body").append("<audio src='audio/Welcome.mp3' preload='preload' autoplay='autoplay'></audio>")
 
 		},
 				leaderboard: function(){
@@ -52,8 +53,8 @@ $(document).ready(function(){
 				$('.comment').emoticonize();
 			}
 		}
-		$(".chat-header").append("<hr>Welcome to Chat Room "+loginObject.chatRoomNum+"!<hr>");
-		$("body").append("<audio src='http://www.thewavsite.com/AOL/welcome.wav' preload='preload' autoplay='autoplay'></audio>")
+		$(".chat-header").append("<hr>Welcome to Chat Room "+$("#roomNum").val()+"!<hr>");
+		$("body").append("<audio src='' preload='preload' autoplay='autoplay'></audio>")
 	});
 	$("#formSubmit").submit(function(e){
 		e.preventDefault();
@@ -65,23 +66,22 @@ $(document).ready(function(){
 		$.post("https://whispering-sierra-7759.herokuapp.com/rooms",
 			myMessage);
 		$("#msg").val("");
-		setTimeout("$('.scrollMe').scrollTop(6000000)",750)
-		$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
 	});
 	$("#userSearch").submit(function(e){
 		e.preventDefault();
+		getUserHistory();
 		console.log($("#whoIs").val());
 		profileObject.userName = $("#whoIs").val();
 		myRouter.navigate("userProfile/"+profileObject.userName, {trigger: true})
-		$(".profile-header").append("<hr>Welcome to "+profileObject.userName+"'s Profile! <hr>");
+		$(".profile-header").append("<hr>Welcome to "+profileObject.userName+"'s Message Histroy! <hr>");
 	});
-		// function userProfile(){
-	// 	$.get(
-	// 		"https://whispering-sierra-7759.herokuapp.com/rooms",
-	// 		onMessagesReceived,
-	// 		"json"
-	// 		);
-	// }
+	function getUserHistory(){
+		$.get(
+			"https://whispering-sierra-7759.herokuapp.com/rooms",
+			onUserHistorySearch,
+			"json"
+			);
+	}
 	function getUserLeaders(){
 		$.get(
 			"https://whispering-sierra-7759.herokuapp.com/top_user",
@@ -98,7 +98,7 @@ $(document).ready(function(){
 	}
 	function getActiveUsers(){
 		$.get(
-			"https://whispering-sierra-7759.herokuapp.com/last_four_hours_users",
+			"https://whispering-sierra-7759.herokuapp.com/chatted_recently/14400",
 			onActiveUsersReceived,
 			"json"
 			);
@@ -143,38 +143,27 @@ $(document).ready(function(){
 					return false;
 				}
 			});
-			if(currentMessage === undefined){
+			if(currentMessage === undefined && postMsg.messages.indexOf(".png") == -1 && postMsg.messages.indexOf(".jpg") == -1 && postMsg.messages.indexOf(".gif") == -1){
 				messageArray.push(messageList[i]);
 				$("#chat").append("<div> <b>"+postMsg.user+"</b>"+ "  "+moment(postMsg.created_at).format("h:mm:ss a, MMM Do YYYY")+"</div>" + "<p class='comment'>"+postMsg.messages+"</p>");
 				$('.comment').emoticonize();
+				setTimeout("$('.scrollMe').scrollTop(6000000)",750)
+				$("body").append("<audio src='audio/im.mp3' preload='auto' autoplay='autoplay'></audio>")
 				console.log(messageArray)
-
 			}
 		}
 	}
-
-	// function getCurrentUsers(){
-	// 	$.get(
-	// 		"https://whispering-sierra-7759.herokuapp.com/rooms/get_time",
-	// 		onCurrentUsersReceived,
-	// 		"json"
-	// 		);
-	// }
-	// function onCurrentUsersReceived(currentUserList){
-	// 	$("#userList").html("");
-	// 	for(var i = 0; i < currentUserList.length; i++){
-	// 		console.log(currentUserList);
-	// 		var usersInRoom = currentUserList[i].user;
-	// 		var usersRoom = currentUserList[i].room;
-	// 		if(usersInRoom === usersInRoom && usersRoom == usersRoom){
-	// 			$("#userList").append("<div> <b>"+usersInRoom+"</b> </div>");
-	// 			break;
-	// 		}
-	// 	}
-	// }
-	// setInterval(getCurrentUsers, 1000)
-	// getCurrentUsers();
-
+	function onUserHistorySearch(overallMsgs){
+		$("#profilemessages").html("");
+		for(var i = 0; i < overallMsgs.length; i++){
+			var postHistory = overallMsgs[i].messages;
+			var correctUser = overallMsgs[i].user;
+			if(correctUser == profileObject.userName){
+				$("#profilemessages").prepend("<div><b>"+moment(overallMsgs[i].created_at).format("h:mm:ss a, MMM Do YYYY")+", Chatroom #"+overallMsgs[i].room+": </b></div>" + "<p class='comment'>"+postHistory+"</p>");
+				$('.comment').emoticonize();
+			}
+		}	
+	}
 	setInterval(getMessages, 50)
 	getMessages();
 
@@ -186,14 +175,6 @@ $(document).ready(function(){
 
 	setInterval(getActiveUsers, 10000)
 	getActiveUsers();
-
 });
-
-// "http://tiny-pizza-server.herokuapp.com/collections/joshstest"
-// https://whispering-sierra-7759.herokuapp.com/rooms - over all
-// https://whispering-sierra-7759.herokuapp.com/rooms/get_time - as of 5 mins
-// https://whispering-sierra-7759.herokuapp.com/top_user - leaderboard - 10 users
-// https://whispering-sierra-7759.herokuapp.com/last_four_hours_users
-// https://whispering-sierra-7759.herokuapp.com/top_room
 
 

@@ -1,3 +1,7 @@
+.img{
+	max-height: 370px;
+	margin: 0 auto 1%;
+}
 nav div{
 	background-color: #337AB7;
 	color:white;
@@ -5,8 +9,11 @@ nav div{
 .icon-bar{
 	background-color: white;
 }
+#login{
+	max-width: 370px;
+margin:0 auto;}
 #login-page{
-	font-size: 55px;
+	font-size: 50px;
 	text-align: center;
 }
 .chat-header{
